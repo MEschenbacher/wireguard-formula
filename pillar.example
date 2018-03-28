@@ -1,0 +1,22 @@
+wireguard:
+  interfaces:
+    wgtest:
+      listen_port: 1337
+      fwmark: 0x1
+      private_key: secret
+      preshared_key: secret
+  peers:
+    wgtest:
+      -
+        peer: 1ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
+        endpoint: '127.0.0.1:1338'
+        allowed_ips:
+          - 10.0.0.2/32
+          - 'fdff::2/128'
+	persistent_keepalive: 25
+      -
+        peer: 2ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
+        endpoint: '127.0.0.1:1339'
+        allowed_ips:
+          - 10.0.0.3/32
+          - 'fdff::3/128'
