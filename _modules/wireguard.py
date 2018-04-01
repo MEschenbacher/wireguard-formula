@@ -1,5 +1,6 @@
 import yaml
 import os
+from tempfile import mkstemp
 
 __virtualname__ = 'wg'
 
@@ -49,20 +50,34 @@ def set(name, listen_port=None, fwmark=None, private_key=None, peer=None,
     if fwmark:
         s = '%s fwmark %s' % (s, fwmark)
     if private_key:
-        assert os.stat(private_key)
-        # TODO private key must be given as file
-        s = '%s private-key %s' % (s, private_key)
+        fd, filename = mkstemp(text=True)
+        with open(filename, 'w') as f:
+            f.write(private_key)
+        os.close(fd)
+        s = '%s private-key %s' % (s, filename)
     if peer:
         s = '%s peer %s' % (s, peer)
     if preshared_key:
-        s = '%s preshared-key %s' % (s, preshared_key)
+        fd2, filename2 = mkstemp(text=True)
+        with open(filename2, 'w') as f:
+            f.write(preshared_key)
+        os.close(fd2)
+        s = '%s preshared-key %s' % (s, filename2)
     if endpoint:
         s = '%s endpoint %s' % (s, endpoint)
     if persistent_keepalive:
         s = '%s persistent-keepalive %s' % (s, persistent_keepalive)
     if allowed_ips:
         s = '%s allowed-ips %s' % (s, allowed_ips)
-    return __salt__['cmd.run'](s)
+
+    r = __salt__['cmd.run'](s)
+
+    if private_key:
+        os.unlink(filename)
+    if preshared_key:
+        os.unlink(filename2)
+
+    return r
 
 def remove_peer(name, peer):
     return __salt__['cmd.run'](
