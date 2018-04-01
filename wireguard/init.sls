@@ -20,7 +20,7 @@ wireguard_{{ interface }}_peer_{{ peer.get('peer') }}:
     - interface: {{ interface }}
     - name: {{ peer.get('peer') }}
 {% if peer.get('endpoint') != None %}
-    - endpoint: {{ peer.get('endpoint') }}
+    - endpoint: '{{ peer.get('endpoint') }}'
 {% endif %}
 {% if peer.get('persistent_keepalive') != None %}
     - persistent_keepalive: {{ peer.get('persistent_keepalive') }}
