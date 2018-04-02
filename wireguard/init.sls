@@ -33,3 +33,12 @@ wireguard_{{ interface }}_peer_{{ peer.get('peer') }}:
 {% endif %}
 {% endfor %}
 {% endfor %}
+
+{% for interface in salt['pillar.get']('wireguard:set_forward_interfaces', []) %}
+net.ipv4.conf.{{interface}}.forwarding:
+  sysctl.present:
+    - value: 1
+net.ipv6.conf.{{interface}}.forwarding:
+  sysctl.present:
+    - value: 1
+{% endfor %}

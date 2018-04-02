@@ -20,3 +20,9 @@ wireguard:
         allowed_ips:
           - 10.0.0.3/32
           - 'fdff::3/128'
+
+  # optionally, a list of interfaces can be specified for which forwarding will
+  # be set to 1 via sysctl.present
+  set_forward_interfaces:
+    - all
+    - wgtest
