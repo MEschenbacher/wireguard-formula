@@ -66,12 +66,12 @@ def peer_present(name, interface, endpoint=None, persistent_keepalive=None,
                  allowed_ips=None, preshared_key=None):
     ret = dict(name=name, changes=dict(), result=False, comment=None)
 
-    show = __salt__['wg.show'](interface)
+    show = __salt__['wg.show'](interface, hide_keys=False)
     if not show:
         ret['comment'] = 'Interface %s does not exist.' % (interface)
         return ret
 
-    show = __salt__['wg.show'](name=interface, peer=name)
+    show = __salt__['wg.show'](name=interface, peer=name, hide_keys=False)
     if not show:
         __salt__['wg.set'](interface, peer=name, endpoint=endpoint,
                 persistent_keepalive=persistent_keepalive,
@@ -95,10 +95,11 @@ def peer_present(name, interface, endpoint=None, persistent_keepalive=None,
     if sorted(show.get('allowed ips')) != sorted(allowed_ips):
         __salt__['wg.set'](interface, peer=name, allowed_ips=','.join(allowed_ips))
         ret['changes']['allowed ips'] = dict(new=allowed_ips, old=show.get('allowed ips'))
-    if show.get('preshared key') and preshared_key and show.get('preshared key') != preshared_key:
+    print(show.get('preshared key'), preshared_key)
+    if preshared_key and show.get('preshared key') != preshared_key:
         __salt__['wg.set'](interface, peer=name, preshared_key=preshared_key)
         ret['changes']['preshared key'] = 'preshared key changed.'
-    if show.get('preshared key') and not preshared_key:
+    elif show.get('preshared key') and not preshared_key:
         __salt__['wg.set'](interface, peer=name, preshared_key='')
         ret['changes']['preshared key'] = 'preshared key deleted.'
 

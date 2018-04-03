@@ -65,7 +65,7 @@ def set(name, listen_port=None, fwmark=None, private_key=None, peer=None,
         s = '%s private-key %s' % (s, filename)
     if peer:
         s = '%s peer %s' % (s, peer)
-    if preshared_key:
+    if preshared_key != None:
         if not peer:
             return 'If preshared_key is given, peer must also be given'
         fd2, filename2 = mkstemp(text=True)
