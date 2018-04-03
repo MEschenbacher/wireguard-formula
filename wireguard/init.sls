@@ -1,9 +1,5 @@
 {% from "wireguard/map.jinja" import wireguard with context %}
 
-wireguard:
-  pkg.installed:
-    - name: {{ wireguard.package }}
-
 {% for interface, values in salt['pillar.get']('wireguard:interfaces', {}).items() %}
 wireguard_{{ interface }}:
   wg.present:

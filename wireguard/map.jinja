@@ -2,7 +2,6 @@
 # vim: ft=jinja
 
 {% import_yaml "wireguard/defaults.yaml" as defaults %}
-{% import_yaml "wireguard/osmap.yaml" as osmap %}
 
 {% set wireguard = salt['grains.filter_by'](
     defaults,
