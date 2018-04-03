@@ -32,8 +32,9 @@ def show(name=None, peer=None):
     else:
         return _wg_ifaces().get(name)
 
-def showconf(name):
-    return __salt__['cmd.run']('wg showconf %s' % (name,))
+def showconf(name, hide_keys=True):
+    return __salt__['cmd.run']('wg showconf %s' % (name,),
+            env={'WG_HIDE_KEYS': 'always' if hide_keys else 'never'})
 
 def set(name, listen_port=None, fwmark=None, private_key=None, peer=None,
         preshared_key=None, endpoint=None, persistent_keepalive=None,
