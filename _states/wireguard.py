@@ -13,12 +13,12 @@ def present(name, listen_port=None, fwmark=None, private_key=None):
 
     ret = dict(name=name, changes=dict(), result=False, comment=None)
 
-    interface = __salt__['wg.show'](name)
-    if not interface:
-        interface = __salt__['wg.create'](name)
+    show = __salt__['wg.show'](name, hide_keys=False)
+    if not show:
+        __salt__['wg.create'](name)
         ret['changes'][name] = 'Interface created.'
 
-    show = __salt__['wg.show'](name)
+    show = __salt__['wg.show'](name, hide_keys=False)
 
     if int(show.get('listening port', 0)) != int(listen_port):
         __salt__['wg.set'](name, listen_port=listen_port)
