@@ -126,7 +126,7 @@ def _wg_ifaces(hide_keys=True):
     tmp = dict()
     tmpiface = dict()
     ifaces = dict()
-    out = __salt__['cmd.run']('wg',
+    out = __salt__['cmd.run']('wg show all',
             env={'WG_HIDE_KEYS': 'always' if hide_keys else 'never'})
     for line in out.splitlines():
         if line.startswith('interface: '):
