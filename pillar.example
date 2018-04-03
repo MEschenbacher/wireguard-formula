@@ -4,7 +4,6 @@ wireguard:
       listen_port: 51820
       # fwmark: 0x1
       private_key: secret
-      # preshared_key: secret
       peers:
         - peer: 1ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
 	  # the note: will not go into wireguard configuration
@@ -15,6 +14,7 @@ wireguard:
             - 10.0.0.2/32
             - 'fdff::2/128'
           persistent_keepalive: 25
+          # preshared_key: secret
         - peer: 2ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
           endpoint: '[2001:db8::1]:1339'
           allowed_ips:

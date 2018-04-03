@@ -6,8 +6,7 @@ def __virtual__():
     return False
 
 
-def present(name, listen_port=None, fwmark=None, private_key=None,
-        preshared_key=None):
+def present(name, listen_port=None, fwmark=None, private_key=None):
     """
     Make sure a wireguard interface exists.
     """
@@ -39,10 +38,6 @@ def present(name, listen_port=None, fwmark=None, private_key=None,
         __salt__['wg.set'](name, private_key=private_key)
         ret['changes']['private key'] = 'private key changed.'
 
-    if show.get('preshared key') != preshared_key:
-        __salt__['wg.set'](name, preshared_key=preshared_key)
-        ret['changes']['preshared key'] = 'preshared key changed.'
-
     ret['result'] = True
 
     return ret
@@ -68,7 +63,7 @@ def absent(name):
 
 
 def peer_present(name, interface, endpoint=None, persistent_keepalive=None,
-                 allowed_ips=None):
+                 allowed_ips=None, preshared_key=None):
     ret = dict(name=name, changes=dict(), result=False, comment=None)
 
     show = __salt__['wg.show'](interface)
@@ -80,7 +75,7 @@ def peer_present(name, interface, endpoint=None, persistent_keepalive=None,
     if not show:
         __salt__['wg.set'](interface, peer=name, endpoint=endpoint,
                 persistent_keepalive=persistent_keepalive,
-                allowed_ips=','.join(allowed_ips))
+                allowed_ips=','.join(allowed_ips), preshared_key=preshared_key)
         ret['changes'][name] = 'Peer created.'
         ret['result'] = True
         return ret
@@ -100,6 +95,13 @@ def peer_present(name, interface, endpoint=None, persistent_keepalive=None,
     if sorted(show.get('allowed ips')) != sorted(allowed_ips):
         __salt__['wg.set'](interface, peer=name, allowed_ips=','.join(allowed_ips))
         ret['changes']['allowed ips'] = dict(new=allowed_ips, old=show.get('allowed ips'))
+    if show.get('preshared key') and preshared_key and show.get('preshared key') != preshared_key:
+        __salt__['wg.set'](interface, peer=name, preshared_key=preshared_key)
+        ret['changes']['preshared key'] = 'preshared key changed.'
+    if show.get('preshared key') and not preshared_key:
+        __salt__['wg.set'](interface, peer=name, preshared_key='')
+        ret['changes']['preshared key'] = 'preshared key deleted.'
+
 
 
     ret['result'] = True

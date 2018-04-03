@@ -5,7 +5,7 @@ wireguard_{{ interface }}:
   wg.present:
     - name: {{ interface }}
 {% for k, v in values.items() %}
-{% if k in ['listen_port', 'fwmark', 'private_key', 'preshared_key'] %}
+{% if k in ['listen_port', 'fwmark', 'private_key'] %}
     - {{k}}: {{v}}
 {% endif %}
 {% endfor %} {# values.items() #}
@@ -26,6 +26,9 @@ wireguard_{{ interface }}_peer_{{ peer.get('peer') }}:
 {% for subnet in peer.get('allowed_ips', []) %}
       - {{subnet}}
 {% endfor %}
+{% if peer.get('preshared_key') != None %}
+    - preshared_key: {{ peer.get('preshared_key') }}
+{% endif %}
 {% endif %}
 {% endfor %}
 
