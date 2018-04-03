@@ -100,12 +100,6 @@ def remove_peer(name, peer):
         'wg set %s peer %s remove' % (name, peer)
     )
 
-#  def add_peer(name, public_key, allowed_ips=None):
-    #  base = 'wg set %s peer %s' % (name, peer)
-#  
-    #  return __salt__['cmd.run'](
-    #  )
-
 def genkey():
     return __salt__['cmd.run']('wg genkey')
 
