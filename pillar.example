@@ -7,6 +7,9 @@ wireguard:
       # preshared_key: secret
       peers:
         - peer: 1ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
+	  # the note: will not go into wireguard configuration
+          # it enables you to label peers
+	  note: some_note
           endpoint: '10.42.0.0:1338'
           allowed_ips:
             - 10.0.0.2/32
