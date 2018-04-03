@@ -12,15 +12,22 @@ def create(name):
     """
     create a wireguard interface. This will fail if it already exists.
     """
-    __salt__['cmd.run']('ip link add %s type wireguard' % (name,))
-    return show(name)
+    ifaces = __salt__['network.interfaces']()
+    if name not in ifaces.keys():
+        __salt__['cmd.run']('ip link add %s type wireguard' % (name,))
+        return {name: dict(new=name, old=None)}
+    return 'Interface %s already exists' % (name,)
 
 def delete(name):
     """
     delete a interface (not neccessarily a wireguard interface). This will fail
     if it does not exist.
     """
-    return __salt__['cmd.run']('ip link del %s' % (name,))
+    ifaces = __salt__['network.interfaces']()
+    if name in ifaces.keys():
+        __salt__['cmd.run']('ip link del %s' % (name,))
+        return {name: dict(new=None, old=name)}
+    return 'Interface %s does not exist' % (name,)
 
 
 def show(name=None, peer=None, hide_keys=True):
