@@ -17,9 +17,10 @@ def create(name):
 
 def delete(name):
     """
-    delete a wireguard interface. This will fail if it does not exist.
+    delete a interface (not neccessarily a wireguard interface). This will fail
+    if it does not exist.
     """
-    return __salt__['cmd.run']('ip link del %s type wireguard' % (name,))
+    return __salt__['cmd.run']('ip link del %s' % (name,))
 
 
 def show(name=None, peer=None):
