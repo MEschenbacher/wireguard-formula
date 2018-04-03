@@ -1,38 +1,32 @@
 # wireguard-formula
 
-Installs WireGuard (usually dkms and utils), and creates interfaces plus peers.
+Installs WireGuard (usually dkms and utils), and creates interfaces including
+peers. Configuration is done via pillar (see below).
+
+# Installation
 
 See the full [Salt Formulas installation and usage instructions](http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html).
 
 # Configuration
 
 All configuration is done via pillar data. See `pillar.example` for examples.
+This means in particular, that you do not have to use any of the following
+states youself.
 
 # Available states
 
-## `wg.present (name, listen_port, fwmark, private_key, preshared_key)`
+## `wg.present`
 
 Creates a wireguard interface and sets interface-wide parameters.
 
-## `wg.peer_present (name, interface, endpoint, persistent_keepalive, allowed_ips)`
+## `wg.peer_present`
 
 Adds a peer to an interface and sets peer-specific parameters.
 
-## `wg.absent (name)`
+## `wg.absent`
 
 Removes a wireguard interface.
 
-## `wg.peer_absent (name, interface)`
+## `wg.peer_absent`
 
 Removes a peer from an interface.
-
-# Excerpt of a few available module functions
-
-`salt-call wg.create wgtest`
-
-`salt-call wg.show wgtest`
-
-`salt-call wg.set interface listen_port=1337`
-
-`salt-call wg.delete wgtest`
-
