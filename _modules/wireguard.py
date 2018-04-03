@@ -59,16 +59,24 @@ def set(name, listen_port=None, fwmark=None, private_key=None, peer=None,
     if peer:
         s = '%s peer %s' % (s, peer)
     if preshared_key:
+        if not peer:
+            return 'If preshared_key is given, peer must also be given'
         fd2, filename2 = mkstemp(text=True)
         with open(filename2, 'w') as f:
             f.write(preshared_key)
         os.close(fd2)
         s = '%s preshared-key %s' % (s, filename2)
     if endpoint:
+        if not peer:
+            return 'If endpoint is given, peer must also be given'
         s = '%s endpoint %s' % (s, endpoint)
     if persistent_keepalive:
+        if not peer:
+            return 'If persistent_keepalive is given, peer must also be given'
         s = '%s persistent-keepalive %s' % (s, persistent_keepalive)
     if allowed_ips:
+        if not peer:
+            return 'If allowed_ips is given, peer must also be given'
         s = '%s allowed-ips %s' % (s, allowed_ips)
 
     r = __salt__['cmd.run'](s)
