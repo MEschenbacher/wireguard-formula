@@ -23,15 +23,15 @@ def delete(name):
     return __salt__['cmd.run']('ip link del %s' % (name,))
 
 
-def show(name=None, peer=None):
+def show(name=None, peer=None, hide_keys=True):
     if peer and not name:
         return 'If peer is given, name must also be given'
     if not name:
-        return _wg_ifaces()
+        return _wg_ifaces(hide_keys=hide_keys)
     elif peer:
-        return _wg_ifaces().get(name).get('peers').get(peer)
+        return _wg_ifaces(hide_keys=hide_keys).get(name).get('peers').get(peer)
     else:
-        return _wg_ifaces().get(name)
+        return _wg_ifaces(hide_keys=hide_keys).get(name)
 
 def showconf(name):
     return __salt__['cmd.run']('wg showconf %s' % (name,))
@@ -111,7 +111,7 @@ def setconf(name, path):
 def addconf(name, path):
     return __salt__['cmd.run']('wg addconf %s %s' % (name, path))
 
-def _wg_ifaces():
+def _wg_ifaces(hide_keys=True):
     """
     Parse output from 'wg show'
     """
@@ -119,7 +119,8 @@ def _wg_ifaces():
     tmp = dict()
     tmpiface = dict()
     ifaces = dict()
-    out = __salt__['cmd.run']('wg', env={'WG_HIDE_KEYS': 'never'})
+    out = __salt__['cmd.run']('wg',
+            env={'WG_HIDE_KEYS': 'always' if hide_keys else 'never'})
     for line in out.splitlines():
         if line.startswith('interface: '):
             k, v = _wg_splitline(line)
