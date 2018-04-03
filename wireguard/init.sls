@@ -4,17 +4,17 @@ wireguard:
   pkg.installed:
     - name: {{ wireguard.package }}
 
-{% for name, values in salt['pillar.get']('wireguard:interfaces', {}).items() %}
-wireguard_{{ name }}:
+{% for interface, values in salt['pillar.get']('wireguard:interfaces', {}).items() %}
+wireguard_{{ interface }}:
   wg.present:
-    - name: {{ name }}
+    - name: {{ interface }}
 {% for k, v in values.items() %}
+{% if k in ['listen_port', 'fwmark', 'private_key', 'preshared_key'] %}
     - {{k}}: {{v}}
-{% endfor %}
-{% endfor %}
+{% endif %}
+{% endfor %} {# values.items() #}
 
-{% for interface, peerlist in salt['pillar.get']('wireguard:peers', {}).items() %}
-{% for peer in peerlist %}
+{% for peer in values.get('peers', {}) %}
 wireguard_{{ interface }}_peer_{{ peer.get('peer') }}:
   wg.peer_present:
     - interface: {{ interface }}
@@ -32,7 +32,9 @@ wireguard_{{ interface }}_peer_{{ peer.get('peer') }}:
 {% endfor %}
 {% endif %}
 {% endfor %}
+
 {% endfor %}
+
 
 {% for interface in salt['pillar.get']('wireguard:set_forward_interfaces', []) %}
 net.ipv4.conf.{{interface}}.forwarding:

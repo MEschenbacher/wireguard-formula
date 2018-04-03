@@ -5,21 +5,18 @@ wireguard:
       fwmark: 0x1
       private_key: secret
       preshared_key: secret
-  peers:
-    wgtest:
-      -
-        peer: 1ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
-        endpoint: '127.0.0.1:1338'
-        allowed_ips:
-          - 10.0.0.2/32
-          - 'fdff::2/128'
-	persistent_keepalive: 25
-      -
-        peer: 2ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
-        endpoint: '127.0.0.1:1339'
-        allowed_ips:
-          - 10.0.0.3/32
-          - 'fdff::3/128'
+      peers:
+        - peer: 1ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
+          endpoint: '127.0.0.1:1338'
+          allowed_ips:
+            - 10.0.0.2/32
+            - 'fdff::2/128'
+          persistent_keepalive: 25
+        - peer: 2ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
+          endpoint: '127.0.0.1:1339'
+          allowed_ips:
+            - 10.0.0.3/32
+            - 'fdff::3/128'
 
   # optionally, a list of interfaces can be specified for which forwarding will
   # be set to 1 via sysctl.present
