@@ -5,10 +5,5 @@
 
 {% set wireguard = salt['grains.filter_by'](
     defaults,
-    merge=salt['grains.filter_by'](
-        osmap,
-        grain='os',
-        merge=salt['pillar.get']('wireguard:lookup', {}),
-    ),
     base='wireguard')
 %}
