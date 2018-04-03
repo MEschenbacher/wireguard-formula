@@ -1,7 +1,12 @@
 # wireguard-formula
 
-Installs WireGuard (usually dkms and utils), and creates interfaces including
-peers. Configuration is done via pillar (see below).
+This formula is supposed to install WireGuard (usually dkms and utils), and
+create interfaces including peers. Configuration is done via pillar (see below).
+
+**Attention**: WireGuard is not yet included in the linux mainline kernel. Also,
+the installation is different on every distribution and sometimes you even have
+to include unstable/testing branches. For now, please
+[install WireGuard](https://www.wireguard.com/install/) yourself.
 
 # Installation
 
