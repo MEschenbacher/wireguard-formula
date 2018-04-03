@@ -96,6 +96,10 @@ def peer_present(name, interface, endpoint=None, persistent_keepalive=None,
     elif not persistent_keepalive and show.get('persistent keepalive'):
         __salt__['wg.set'](interface, peer=name, persistent_keepalive=0)
         ret['changes']['persistent keepalive'] = 'persistent keepalive removed.'
+    if sorted(show.get('allowed ips')) != sorted(allowed_ips):
+        __salt__['wg.set'](interface, peer=name, allowed_ips=','.join(allowed_ips))
+        ret['changes']['allowed ips'] = dict(new=allowed_ips, old=show.get('allowed ips'))
+
 
     ret['result'] = True
 
