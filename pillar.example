@@ -20,6 +20,8 @@ wireguard:
 
   # optionally, a list of interfaces can be specified for which forwarding will
   # be set to 1 via sysctl.present
+  # ATTENTION: this option is experimental and I haven't made my mind up whether
+  # it'll stay. Please don't rely on this for now.
   set_forward_interfaces:
     - all
     - wgtest
