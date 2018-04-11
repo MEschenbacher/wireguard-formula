@@ -20,7 +20,7 @@ def present(name, listen_port=None, fwmark=None, private_key=None):
 
     show = __salt__['wg.show'](name, hide_keys=False)
 
-    if int(show.get('listening port', 0)) != int(listen_port):
+    if listen_port and int(show.get('listening port', 0)) != int(listen_port):
         __salt__['wg.set'](name, listen_port=listen_port)
         ret['changes']['listening port'] = dict(
                 old=show.get('listening port', 0),
@@ -85,7 +85,7 @@ def peer_present(name, interface, endpoint=None, persistent_keepalive=None,
         ret['changes']['endpoint'] = dict(
                 old=show.get('endpoint'), new=endpoint)
 
-    if persistent_keepalive and show.get('persistent keepalive', '').startswith('every %s second' % (persistent_keepalive,)):
+    if persistent_keepalive and not show.get('persistent keepalive', '').startswith('every %s second' % (persistent_keepalive,)):
         __salt__['wg.set'](interface, peer=name,
                 persistent_keepalive=persistent_keepalive)
         ret['changes']['persistent keepalive'] = 'persistent keepalive changed.'

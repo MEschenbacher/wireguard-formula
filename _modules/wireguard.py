@@ -77,7 +77,7 @@ def set(name, listen_port=None, fwmark=None, private_key=None, peer=None,
         if not peer:
             return 'If endpoint is given, peer must also be given'
         s = '%s endpoint %s' % (s, endpoint)
-    if persistent_keepalive:
+    if persistent_keepalive is not None:
         if not peer:
             return 'If persistent_keepalive is given, peer must also be given'
         s = '%s persistent-keepalive %s' % (s, persistent_keepalive)
