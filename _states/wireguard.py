@@ -82,8 +82,10 @@ def peer_present(name, interface, endpoint=None, persistent_keepalive=None,
 
     if endpoint and show.get('endpoint', '') != endpoint:
         __salt__['wg.set'](interface, peer=name, endpoint=endpoint)
-        ret['changes']['endpoint'] = dict(
-                old=show.get('endpoint'), new=endpoint)
+        updated_show = __salt__['wg.show'](name=interface, peer=name)
+        if updated_show.get('endpoint') != show.get('endpoint'):
+            ret['changes']['endpoint'] = dict(
+                    old=show.get('endpoint'), new=updated_show.get('endpoint'))
 
     if persistent_keepalive and not show.get('persistent keepalive', '').startswith('every %s second' % (persistent_keepalive,)):
         __salt__['wg.set'](interface, peer=name,
