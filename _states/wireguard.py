@@ -97,7 +97,6 @@ def peer_present(name, interface, endpoint=None, persistent_keepalive=None,
     if sorted(show.get('allowed ips')) != sorted(allowed_ips):
         __salt__['wg.set'](interface, peer=name, allowed_ips=','.join(allowed_ips))
         ret['changes']['allowed ips'] = dict(new=allowed_ips, old=show.get('allowed ips'))
-    print(show.get('preshared key'), preshared_key)
     if preshared_key and show.get('preshared key') != preshared_key:
         __salt__['wg.set'](interface, peer=name, preshared_key=preshared_key)
         ret['changes']['preshared key'] = 'preshared key changed.'
