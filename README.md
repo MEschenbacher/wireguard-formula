@@ -21,18 +21,4 @@ states youself.
 
 # Available states
 
-## `wg.present`
-
-Creates a wireguard interface and sets interface-wide parameters.
-
-## `wg.peer_present`
-
-Adds a peer to an interface and sets peer-specific parameters.
-
-## `wg.absent`
-
-Removes a wireguard interface.
-
-## `wg.peer_absent`
-
-Removes a peer from an interface.
+No states. Include `wireguard` in the top.sls file.

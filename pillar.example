@@ -1,30 +1,11 @@
 wireguard:
-  interfaces:
-    wgtest:
-      listen_port: 51820
-      # fwmark: 0x1
-      private_key: secret
-      peers:
-        - peer: 1ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
-	  # the note: will not go into wireguard configuration
-          # it enables you to label peers
-	  note: some_note
-          endpoint: '10.42.0.0:1338'
-          allowed_ips:
-            - 10.0.0.2/32
-            - 'fdff::2/128'
-          persistent_keepalive: 25
-          # preshared_key: secret
-        - peer: 2ymBfBty05PNhD/QJKUlu4aL2p4jKSWVVqVQWIQG6wM=
-          endpoint: '[2001:db8::1]:1339'
-          allowed_ips:
-            - 10.0.0.3/32
-            - 'fdff::3/128'
-
-  # optionally, a list of interfaces can be specified for which forwarding will
-  # be set to 1 via sysctl.present
-  # ATTENTION: this option is experimental and I haven't made my mind up whether
-  # it'll stay. Please don't rely on this for now.
-  set_forward_interfaces:
-    - all
-    - wgtest
+  wg0:
+    config: |
+        [Interface]
+        Address = fe80::1/64
+        ListenPort = 51820
+        PrivateKey = private
+        Table = off
+        [Peer]
+        PublicKey = peer
+        AllowedIPs = fe80::2

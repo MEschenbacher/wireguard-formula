@@ -1,45 +1,21 @@
-{% from "wireguard/map.jinja" import wireguard with context %}
+{%- for interface in salt['pillar.get']('wireguard', {}).keys() %}
+wireguard_interface_{{interface}}:
+  file.managed:
+    - name: /etc/wireguard/{{interface}}.conf
+    - contents_pillar: wireguard:{{interface}}:config
+    - mode: 640
 
-{% for interface, values in salt['pillar.get']('wireguard:interfaces', {}).items() %}
-wireguard_{{ interface }}:
-  wg.present:
-    - name: {{ interface }}
-{% for k, v in values.items() %}
-{% if k in ['listen_port', 'fwmark', 'private_key'] %}
-    - {{k}}: {{v}}
+{% if salt['pillar.get']('wireguard:' ~ interface ~ ':enable', True) %}
+restart wg-quick@{{interface}}:
+  service.running:
+    - name: wg-quick@{{interface}}
+    - enable: True
+    - watch:
+      - file: wireguard_interface_{{interface}}
+{% else %}
+stop and disable wg-quick@{{interface}}:
+  service.dead:
+    - name: wg-quick@{{interface}}
+    - enable: False
 {% endif %}
-{% endfor %} {# values.items() #}
-
-{% for peer in values.get('peers', {}) %}
-wireguard_{{ interface }}_peer_{{ peer.get('peer') }}:
-  wg.peer_present:
-    - interface: {{ interface }}
-    - name: {{ peer.get('peer') }}
-{% if peer.get('endpoint') != None %}
-    - endpoint: '{{ peer.get('endpoint') }}'
-{% endif %}
-{% if peer.get('persistent_keepalive') != None %}
-    - persistent_keepalive: {{ peer.get('persistent_keepalive') }}
-{% endif %}
-{% if peer.get('allowed_ips') != None %}
-    - allowed_ips:
-{% for subnet in peer.get('allowed_ips', []) %}
-      - {{subnet}}
-{% endfor %}
-{% if peer.get('preshared_key') != None %}
-    - preshared_key: {{ peer.get('preshared_key') }}
-{% endif %}
-{% endif %}
-{% endfor %}
-
-{% endfor %}
-
-
-{% for interface in salt['pillar.get']('wireguard:set_forward_interfaces', []) %}
-net.ipv4.conf.{{interface}}.forwarding:
-  sysctl.present:
-    - value: 1
-net.ipv6.conf.{{interface}}.forwarding:
-  sysctl.present:
-    - value: 1
-{% endfor %}
+{%- endfor %}
