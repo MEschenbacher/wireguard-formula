@@ -4,6 +4,27 @@ wireguard:
     delete: False
     # default True
     enable: True
+
+    # see wg(8) and wg-quick(8) for supported keys. We use all lowercase letters.
+    address:
+      - fe80::1/64
+      - 10.0.0.1/24
+    listenport: 51820
+    peers:
+      - publickey: foobar
+        allowedips:
+	  - fe80::2
+	  - 10.0.0.2/32
+	presharedkey: secret1
+      - publickey: bazbar
+        allowedips:
+	  - fe80::3
+	  - 10.0.0.3/32
+	presharedkey: secret2
+
+    # the config key can be used to pass a whole wireguard config in. Make sure
+    # to have the correct indentation of 4 spaces more than the config key and
+    # to start with config: |
     config: |
         [Interface]
         Address = fe80::1/64
