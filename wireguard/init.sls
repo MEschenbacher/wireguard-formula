@@ -28,7 +28,7 @@ wireguard_interface_{{interface}}_config:
     - source: salt://wireguard/files/wg.conf
     - template: jinja
     - context:
-      interface: {{interface}}
+      interface: {{salt['pillar.get']('wireguard:' ~ interface)}}
     - mode: 600
 {% endif %}
 
