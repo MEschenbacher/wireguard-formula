@@ -26,7 +26,7 @@ wireguard_interface_{{interface}}_config:
   file.managed:
     - name: /etc/wireguard/{{interface}}.conf
     - source: salt://wireguard/files/wg.conf
-    - template: jinja2
+    - template: jinja
     - context:
       interface: {{interface}}
     - mode: 600
