@@ -9,6 +9,11 @@ to include unstable/testing branches. For now, please
 [install WireGuard](https://www.wireguard.com/install/) yourself. You can use
 this formula afterwards.
 
+# Requirements
+
+ - systemd: This formula makes use of wireguard systemd service files.
+ - wireguard kermel module
+
 # Installation
 
 See the full [Salt Formulas installation and usage instructions](http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html).
