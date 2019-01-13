@@ -1,5 +1,9 @@
 wireguard:
   wg0:
+    # default False
+    delete: False
+    # default True
+    enable: True
     config: |
         [Interface]
         Address = fe80::1/64
