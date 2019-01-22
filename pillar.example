@@ -1,17 +1,28 @@
 wireguard:
   wg0:
-    # default False
-    delete: False
-    # default True
-    enable: True
+    # The two following keys are non-wireguard options.
+    # Delete the config file. The interface will also be stopped and disables.
+    # Defaults to False.
+    #delete: False
+    # Start and enable the service. Setting this to false causes the interface
+    # to be stopped and disabled. Defaults to True.
+    #enable: True
 
-    # see wg(8) and wg-quick(8) for supported keys. We use all lowercase letters.
+    # see wg(8) and wg-quick(8) for supported keys. We use all lowercase
+    # letters.
+
+    # address must be a list
     address:
       - fe80::1/64
       - 10.0.0.1/24
     listenport: 51820
+    # very important to quote off. Jinja expands off without quotes to False
+    # which will result in 'table' not being set in the config file, resulting
+    # in defaulting to auto.
+    table: 'off'
     peers:
       - publickey: foobar
+        # address must be a list
         allowedips:
 	  - fe80::2
 	  - 10.0.0.2/32
@@ -22,9 +33,10 @@ wireguard:
 	  - 10.0.0.3/32
         presharedkey: secret2
 
-    # the config key can be used to pass a whole wireguard config in. Make sure
-    # to have the correct indentation of 4 spaces more than the config key and
-    # to start with config: |
+    # the config key can be used to pass a whole wireguard config in. The config
+    # key takes precendce. Every other wireguard option in will then be ignored.
+    # Make sure to have the correct indentation of 4 spaces more than the config
+    # key and to start with config: |
     config: |
         [Interface]
         Address = fe80::1/64
