@@ -9,10 +9,13 @@ to include unstable/testing branches. For now, please
 [install WireGuard](https://www.wireguard.com/install/) yourself. You can use
 this formula afterwards.
 
+**Important**: On every configuration change, this formula restarts the
+wireguard interface in order to apply any changes.
+
 # Requirements
 
- - systemd: This formula makes use of wireguard systemd service files.
- - wireguard kermel module
+ - systemd: This formula makes use of wireguard-shipped systemd service files
+ - wireguard kernel module
 
 # Installation
 
@@ -27,3 +30,11 @@ states youself.
 # Available states
 
 No states. Include `wireguard` in the top.sls file.
+
+```
+base:
+[... snip ...]
+  'some_minion':
+    - wireguard
+[... snip ...]
+```

@@ -1,48 +1,55 @@
 wireguard:
-  wg0:
-    # The two following keys are non-wireguard options.
-    # Delete the config file. The interface will also be stopped and disables.
-    # Defaults to False.
-    #delete: False
-    # Start and enable the service. Setting this to false causes the interface
-    # to be stopped and disabled. Defaults to True.
-    #enable: True
+  interfaces:
+    wg0:
+      # The two following keys are non-wireguard options.
+      # Delete the config file. The interface will also be stopped and disables.
+      # Defaults to False.
+      #delete: False
+      # Start and enable the service. Setting this to false causes the interface
+      # to be stopped and disabled. Defaults to True.
+      #enable: True
 
-    # see wg(8) and wg-quick(8) for supported keys. We use all lowercase
-    # letters.
+      config:
+        # see wg(8) and wg-quick(8) for supported keys. We use all lowercase
+        # letters.
 
-    # address must be a list
-    address:
-      - fe80::1/64
-      - 10.0.0.1/24
-    listenport: 51820
-    # very important to quote off. Jinja expands off without quotes to False
-    # which will result in 'table' not being set in the config file, resulting
-    # in defaulting to auto.
-    table: 'off'
-    peers:
-      - publickey: foobar
-        # address must be a list
-        allowedips:
-	  - fe80::2
-	  - 10.0.0.2/32
-        presharedkey: secret1
-      - publickey: bazbar
-        allowedips:
-	  - fe80::3
-	  - 10.0.0.3/32
-        presharedkey: secret2
+        PrivateKey: private_key_string
 
-    # the config key can be used to pass a whole wireguard config in. The config
-    # key takes precendce. Every other wireguard option in will then be ignored.
-    # Make sure to have the correct indentation of 4 spaces more than the config
-    # key and to start with config: |
-    config: |
-        [Interface]
-        Address = fe80::1/64
-        ListenPort = 51820
-        PrivateKey = private
-        Table = off
-        [Peer]
-        PublicKey = peer
-        AllowedIPs = fe80::2
+        # address must be a list of strings or a comma separated string
+        Address:
+          - fe80::1/64
+          - 10.0.0.1/24
+        #Address: fe80::1/64, 10.0.0.1/24
+        ListenPort: 51820
+
+	# It is very important to quote off. Jinja expands off without quotes to
+	# False which will result in 'table' not being set in the config file,
+	# resulting in defaulting to auto.
+        Table: 'off'
+      peers:
+        - PublicKey: foobar
+          # AllowedIPs must be a list of strings or a comma separated string
+          AllowedIPs:
+            - fe80::2
+            - 10.0.0.2/32
+          PresharedKey: secret1
+        - Publickey: bazbar
+          AllowedIPs:
+            - fe80::3
+            - 10.0.0.3/32
+          PresharedKey: secret2
+
+      # the raw_config key can be used to pass a whole wireguard config in. The
+      # raw_config key takes precendce before the regular config and peers keys.
+      # Every other wireguard option in will then be ignored.  Make sure to have
+      # the correct indentation of 4 spaces more than the raw_config key and to
+      # start with raw_config: |
+      raw_config: |
+          [Interface]
+          Address = fe80::1/64
+          ListenPort = 51820
+          PrivateKey = private
+          Table = off
+          [Peer]
+          PublicKey = peer
+          AllowedIPs = fe80::2
