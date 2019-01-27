@@ -27,6 +27,25 @@ All configuration is done via pillar data. See `pillar.example` for examples.
 This means in particular, that you do not have to use any of the following
 states youself.
 
+Some keys can be present in the config file multiple times. To do this, you can
+start a list under a key. If the configuration format allows a single comma
+separated string for the respective key, they all will appear in the config
+file.
+```
+wireguard:
+  interfaces:
+    wgtest:
+      config:
+        DNS:
+	  - 8.8.8.8
+	  - 1.1.1.1
+	DNS: 9.9.9.9, 1.0.0.1
+	Address: fe80::1, fe80::2
+	Address:
+	  - fe80::3
+	  - fe80::4
+```
+
 # Available states
 
 No states. Include `wireguard` in the top.sls file.
