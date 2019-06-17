@@ -1,4 +1,4 @@
-{%- for interface_name, interface_dict in salt.pillar.get('wireguard:interfaces', {}).items() %}
+{%- for interface_name, interface_dict in salt['pillar.get']('wireguard:interfaces', {}).items() %}
 
   {% if interface_dict.get('delete', False) %}
 stop and disable wg-quick@{{interface_name}}:
