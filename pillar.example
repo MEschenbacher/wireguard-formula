@@ -10,12 +10,13 @@ wireguard:
       #enable: True
 
       config:
-        # see wg(8) and wg-quick(8) for supported keys. We use all lowercase
-        # letters.
+        # see wg(8) and wg-quick(8) for supported keys.
 
+        # wg genkey
         PrivateKey: private_key_string
 
-        # address must be a list of strings or a comma separated string
+        # Address accepts a list of addresses or a string. Additionally wg-quick
+        # will expand comma separated addresses.
         Address:
           - fe80::1/64
           - 10.0.0.1/24
