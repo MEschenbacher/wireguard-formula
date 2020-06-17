@@ -1,3 +1,22 @@
+{% from "wireguard/map.jinja" import wireguard with context %}
+
+wireguard_software:
+  pkg.installed:
+    - pkgs:
+{%- for pkg in wireguard.packages %}
+      - {{ pkg }}
+{%- endfor %}
+{%- if wireguard.get('repository', False) %}
+    - require:
+      - pkgrepo: wireguard_repo
+
+wireguard_repo:
+  pkgrepo.managed:
+{%- for k,v in wireguard.repository.items() %}
+    - {{ k }}: {{ v }}
+{%- endfor %}
+{%- endif %}
+
 {%- for interface_name, interface_dict in salt['pillar.get']('wireguard:interfaces', {}).items() %}
 
   {% if interface_dict.get('delete', False) %}
@@ -21,6 +40,8 @@ restart wg-quick@{{interface_name}}:
     - enable: True
     - watch:
       - file: wireguard_interface_{{interface_name}}_config
+    - require:
+      - pkg: wireguard_software
     {% endif %}
 
     {% if interface_dict.get('raw_config') %}

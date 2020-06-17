@@ -1,0 +1,31 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+#
+# Setup variables using grains['osarch'] based logic.
+# You just need to add the key:values for an `osarch` that differ
+# from `defaults.yaml`.
+# Only add an `osarch` which is/will be supported by the formula.
+#
+# If you do not need to provide defaults via the `osarch` grain,
+# you will need to provide at least an empty dict in this file, e.g.
+# osarch: {}
+---
+Leap-15:
+  aarch64:
+    repository:
+      name: wireguard
+      humanname: Wireguard VPN
+      baseurl: https://download.opensuse.org/repositories/network:/vpn:/wireguard/openSUSE_Leap_15.1_ARM
+      gpgautoimport: True
+      gpgkey: https://download.opensuse.org/repositories/network:/vpn:/wireguard/openSUSE_Leap_15.1/repodata/repomd.xml.key
+      gpgcheck: 1
+  x86_64:
+    repository:
+      name: wireguard
+      humanname: Wireguard VPN
+      baseurl: https://download.opensuse.org/repositories/network:/vpn:/wireguard/openSUSE_Leap_15.1
+      gpgautoimport: True
+      gpgkey: https://download.opensuse.org/repositories/network:/vpn:/wireguard/openSUSE_Leap_15.1/repodata/repomd.xml.key
+      gpgcheck: 1
+default:
+  default: {}
