@@ -27,12 +27,14 @@ restart wg-quick@{{interface_name}}:
 wireguard_interface_{{interface_name}}_config:
   file.managed:
     - name: /etc/wireguard/{{interface_name}}.conf
+    - makedirs: True
     - contents_pillar: wireguard:interfaces:{{interface_name}}:raw_config
     - mode: 600
     {% else %}
 wireguard_interface_{{interface_name}}_config:
   file.managed:
     - name: /etc/wireguard/{{interface_name}}.conf
+    - makedirs: True
     - source: salt://wireguard/files/wg.conf
     - template: jinja
     - context:
