@@ -54,3 +54,11 @@ wireguard:
           [Peer]
           PublicKey = peer
           AllowedIPs = fe80::2
+
+  # Internal formula configuration can be overridden using values placed
+  # in this lookup table. For more variables that can be overridden, see
+  # defaults.yaml and os*map.yaml
+  # lookup:
+  #   packages:
+  #     - wireguard-tools
+  #     - wireguard-kmod
