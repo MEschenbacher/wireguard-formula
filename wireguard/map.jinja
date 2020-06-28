@@ -14,7 +14,7 @@
       merge=salt['grains.filter_by'](osmap, grain='os',
         merge=salt['grains.filter_by'](osfingermap, grain='osfinger',
           merge=salt['grains.filter_by'](salt['grains.filter_by'](osarchmap, grain='osfinger'), grain='osarch',
-            merge=salt['pillar.get']('wireguard'))
+            merge=salt['pillar.get']('wireguard:lookup'))
         )
       )
     )
