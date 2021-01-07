@@ -11,3 +11,7 @@
 # osfamilymap: {}
 ---
 default: {}
+
+Debian:
+  packages:
+    - qrencode
