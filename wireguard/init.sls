@@ -52,6 +52,12 @@ wireguard_interface_{{interface_name}}_config:
     - contents_pillar: wireguard:interfaces:{{interface_name}}:raw_config
     - mode: 600
     {% else %}
+{% if salt['pillar.get']('wireguard:interfaces:'~interface_name~':config:PrivateKey') == '' %}
+wireguard_{{interface_name}}_privatekey_missing:
+  test.fail_without_changes:
+    - name: "no wireguard private key for interface {{interface_name}} in pillars"
+    - failhard: True
+{% endif %}
 wireguard_interface_{{interface_name}}_config:
   file.managed:
     - name: /etc/wireguard/{{interface_name}}.conf
