@@ -52,7 +52,7 @@ wireguard_interface_{{interface_name}}_config:
     - contents_pillar: wireguard:interfaces:{{interface_name}}:raw_config
     - mode: 600
     {% else %}
-{% if salt['pillar.get']('wireguard:interfaces:'~interface_name~':config:PrivateKey') == '' %}
+{% if (interface_dict.get('enable', True) and not interface_dict.get('delete', False)) and (not interface_dict.get('config', {}).get('PrivateKey') and not interface_dict.get('raw_config')) %}
 wireguard_{{interface_name}}_privatekey_missing:
   test.fail_without_changes:
     - name: "no wireguard private key for interface {{interface_name}} in pillars"
