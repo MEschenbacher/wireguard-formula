@@ -62,3 +62,8 @@ wireguard:
   #   packages:
   #     - wireguard-tools
   #     - wireguard-kmod
+
+  # Whether to reload configuration changes instead of restarting the tunnels.
+  # This is False by default, as only changes to [Peers] are considered during a reload.
+  # It might be useful to set this on demand, for example: state.apply pillar='{"wireguard": {"lookup": {"syncconf": true}}}'
+  #   syncconf: true
