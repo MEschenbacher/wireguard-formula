@@ -1,17 +1,10 @@
 # wireguard-formula
 
-This formula is supposed to install WireGuard (usually dkms and utils), create
-and manage interfaces including peers. Configuration is done via pillar (see
-below).
+This formula installs the WireGuard utils and manages interfaces (config files) including
+peers. Configuration is done via pillar (see `pillar.example`).
 
-**Attention**: WireGuard is not yet included in the linux mainline kernel. Also,
-the installation is different on every distribution and sometimes you even have
-to include unstable/testing branches. For now, please
-[install WireGuard](https://www.wireguard.com/install/) yourself. You can use
-this formula afterwards.
-
-**Important**: On every configuration change, this formula restarts the
-wireguard interface in order to apply any changes.
+**Important**: On every configuration change, this formula restarts the wireguard interface in
+order to apply any changes.
 
 # Requirements
 
@@ -35,7 +28,7 @@ file. Also see `pillar.example`.
 
 # Available states
 
-No states. Include `wireguard` in the top.sls file.
+No states are documented, just include the `wireguard` in the `top.sls` file.
 
 ```
 base:
