@@ -1,4 +1,16 @@
 {% from "wireguard/map.jinja" import wireguard with context %}
+{%- set directory = wireguard.directory ~ '/' %}
+{%- set interfaces = salt['pillar.get']('wireguard:interfaces', {}) %}
+
+{%- macro destroy_interface(interface_name) %}
+stop and disable wg-quick@{{interface_name}}:
+  service.dead:
+    - name: wg-quick@{{interface_name}}
+    - enable: False
+remove wireguard_interface_{{interface_name}}:
+  file.absent:
+    - name: {{directory}}{{interface_name}}.conf
+{%- endmacro %}
 
 wireguard_software:
   pkg.installed:
@@ -17,16 +29,10 @@ wireguard_repo:
 {%- endfor %}
 {%- endif %}
 
-{%- for interface_name, interface_dict in salt['pillar.get']('wireguard:interfaces', {}).items() %}
+{%- for interface_name, interface_dict in interfaces.items() %}
 
   {% if interface_dict.get('delete', False) %}
-stop and disable wg-quick@{{interface_name}}:
-  service.dead:
-    - name: wg-quick@{{interface_name}}
-    - enable: False
-remove wireguard_interface_{{interface_name}}:
-  file.absent:
-    - name: /etc/wireguard/{{interface_name}}.conf
+{{ destroy_interface(interface_name) }}
   {% else %}
     {% if not interface_dict.get('enable', True) %}
 stop and disable wg-quick@{{interface_name}}:
@@ -48,7 +54,7 @@ restart wg-quick@{{interface_name}}:
     {% if interface_dict.get('raw_config') %}
 wireguard_interface_{{interface_name}}_config:
   file.managed:
-    - name: /etc/wireguard/{{interface_name}}.conf
+    - name: {{directory}}{{interface_name}}.conf
     - makedirs: True
     - contents_pillar: wireguard:interfaces:{{interface_name}}:raw_config
     - mode: 600
@@ -61,7 +67,7 @@ wireguard_{{interface_name}}_privatekey_missing:
 {% endif %}
 wireguard_interface_{{interface_name}}_config:
   file.managed:
-    - name: /etc/wireguard/{{interface_name}}.conf
+    - name: {{directory}}{{interface_name}}.conf
     - makedirs: True
     - source: salt://wireguard/files/wg.conf
     - template: jinja
@@ -74,3 +80,12 @@ wireguard_interface_{{interface_name}}_config:
   {% endif %}
 
 {%- endfor %}
+
+{%- if wireguard.clean is sameas true %}
+  {%- for file in salt['file.find'](directory, maxdepth=1, mindepth=1, name='*.conf', print='name', type='f') %}
+    {%- set interface_name = file[:-5] %}
+    {%- if interface_name not in interfaces %}
+{{ destroy_interface(interface_name) }}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
