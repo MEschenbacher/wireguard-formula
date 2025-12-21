@@ -4,3 +4,4 @@
 wireguard:
   packages:
     - wireguard
+  syncconf: false

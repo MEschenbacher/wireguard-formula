@@ -38,6 +38,7 @@ restart wg-quick@{{interface_name}}:
   service.running:
     - name: wg-quick@{{interface_name}}
     - enable: True
+    - reload: {{ wireguard.syncconf }}
     - watch:
       - file: wireguard_interface_{{interface_name}}_config
     - require:
