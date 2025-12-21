@@ -23,10 +23,8 @@ wireguard:
         #Address: fe80::1/64, 10.0.0.1/24
         ListenPort: 51820
 
-        # It is very important to quote off. Jinja expands off without quotes to
-        # False which will result in 'table' not being set in the config file,
-        # resulting in defaulting to auto.
-        Table: 'off'
+        # booleans are converted automatically
+        Table: off
       peers:
         - PublicKey: foobar
           # AllowedIPs must be a list of strings or a comma separated string
