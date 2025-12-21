@@ -2,6 +2,8 @@
 # vim: ft=yaml
 
 wireguard:
+  clean: false
+  directory: /etc/wireguard
   packages:
     - wireguard
   syncconf: false

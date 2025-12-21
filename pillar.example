@@ -57,6 +57,15 @@ wireguard:
   # in this lookup table. For more variables that can be overridden, see
   # defaults.yaml and os*map.yaml
   # lookup:
+
+  # Whether to stop and remove configurations not matching any entries in the "interfaces" pillar (above).
+  # Defaults to False.
+  #   clean: False
+
+  # The directory to manage configuration files in.
+  # Defaults to /etc/wireguard.
+  #   directory: /etc/wireguard
+
   #   packages:
   #     - wireguard-tools
   #     - wireguard-kmod
