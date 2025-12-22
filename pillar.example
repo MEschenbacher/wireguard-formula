@@ -1,13 +1,15 @@
 wireguard:
   interfaces:
     wg0:
-      # The two following keys are non-wireguard options.
-      # Delete the config file. The interface will also be stopped and disables.
-      # Defaults to False.
-      #delete: False
+
+      # Delete the config file. The interface will also be stopped and disabled.
+      # default false
+      # delete: True
+
       # Start and enable the service. Setting this to false causes the interface
-      # to be stopped and disabled. Defaults to True.
-      #enable: True
+      # to be stopped and disabled.
+      # default true
+      # enable: False
 
       config:
         # see wg(8) and wg-quick(8) for supported keys.
@@ -21,17 +23,26 @@ wireguard:
           - fe80::1/64
           - 10.0.0.1/24
         #Address: fe80::1/64, 10.0.0.1/24
+
         ListenPort: 51820
 
         # booleans are converted automatically
         Table: off
+
+      # the list of peers
+      # default []
       peers:
-        - PublicKey: foobar
+        -
+          # required
+          PublicKey: foobar
+
           # AllowedIPs must be a list of strings or a comma separated string
           AllowedIPs:
             - fe80::2
             - 10.0.0.2/32
+
           PresharedKey: secret1
+
         - Publickey: bazbar
           AllowedIPs:
             - fe80::3
